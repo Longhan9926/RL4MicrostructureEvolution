@@ -530,7 +530,7 @@ class ODF:
 
         mat_in = mat_inp_file.read_text().split('\n')[1:]
 
-        orientations = [np.float_(s.split(',')[:3]) for i, s in enumerate(mat_in)]
+        orientations = [np.float64(s.split(',')[:3]) for i, s in enumerate(mat_in)]
         orientations = np.array(orientations)
         orientations_q = cls._bunge_eulers_to_quats(orientations)
 
@@ -641,7 +641,7 @@ class ODF:
     def _build_microstructure_hist(self):
         global _UD_ORIS_KD_TREE
         odf_elems = [x.elements for x in self.ORIS]
-        dists, nns = _UD_ORIS_KD_TREE[self._n_whd_bins].query(odf_elems, self._whd_soft_assignment, n_jobs=-1)
+        dists, nns = _UD_ORIS_KD_TREE[self._n_whd_bins].query(odf_elems, self._whd_soft_assignment, workers=-1)
 
         # invert symmetries
         nns = (nns // 24) % self._n_whd_bins
